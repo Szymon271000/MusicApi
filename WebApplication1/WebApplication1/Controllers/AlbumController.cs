@@ -119,5 +119,25 @@ namespace WebApplication1.Controllers
             await _albumRepository.Delete(albumToDelete);
             return NoContent();
         }
+
+        [HttpPut("{id}/songs/{songId}")]
+        public async Task<IActionResult> UpdateSongToAlbum(int id, int songId)
+        {
+            var album =  await _albumRepository.GetById(id);
+           
+            if (album == null)
+            {
+                return NotFound();
+            }
+            var song = await _songRepository.GetById(songId);
+            if (song == null)
+            {
+                return NotFound();
+            }
+            song.Album = album;
+            album.Songs.ToList().Add(song);
+            _albumRepository.Update(album);
+            return Ok();
+        }
     }
 }

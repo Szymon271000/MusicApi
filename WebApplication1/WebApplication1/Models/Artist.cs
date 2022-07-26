@@ -1,4 +1,6 @@
-﻿namespace WebApplication1.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace WebApplication1.Models
 {
     public class Artist
     {
@@ -6,5 +8,8 @@
         public string? Name { get; set; }
 
         public IEnumerable<Album> ?Albums { get; set; }
+
+        [ForeignKey("Album")]
+        public int? AlbumId { get; set; }
     }
 }
