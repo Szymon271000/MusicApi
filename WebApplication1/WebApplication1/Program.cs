@@ -44,6 +44,7 @@ builder.Services.AddDbContext<MusicDbContext>(o => o.UseSqlServer(builder.Config
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IBaseRepository<Genre>, GenreRepository>();
 builder.Services.AddScoped<IBaseRepository<Song>, SongRepository>();
+builder.Services.AddScoped<IBaseRepository<Playlist>, PlaylistRepository>();
 
 
 var app = builder.Build();

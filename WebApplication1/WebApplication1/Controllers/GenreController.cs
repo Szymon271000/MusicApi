@@ -116,5 +116,25 @@ namespace WebApplication1.Controllers
             return Ok();
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteGenre(int id)
+        {
+            var genreToDelete = await _genreRepository.GetById(id);
+            if (genreToDelete == null)
+            {
+                return NotFound();
+            }
+
+            var songsWithThisGender = await _songRepository.GetAll();
+            foreach (var song in songsWithThisGender)
+            {
+                if (song.GenreId == id)
+                {
+                    song.Genre = null;
+                }
+            }
+            await _genreRepository.Delete(genreToDelete);
+            return NoContent();
+        }
     }
 }
