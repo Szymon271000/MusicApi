@@ -12,14 +12,16 @@ namespace WebApplication1.Data.Repository.Repositories
         {
             _musicDbContext = context;
         }
-        public Task Add(Song entity)
+        public async Task Add(Song entity)
         {
-            throw new NotImplementedException();
+            await _musicDbContext.Songs.AddAsync(entity);
+            await Save();
         }
 
         public async Task Delete(Song entity)
         {
-            throw new NotImplementedException();
+            _musicDbContext.Songs.Remove(entity);
+            await Save();
         }
 
         public async Task<List<Song>> GetAll()
@@ -27,19 +29,20 @@ namespace WebApplication1.Data.Repository.Repositories
             return await _musicDbContext.Songs.ToListAsync();
         }
 
-        public Task<Song> GetById(int id)
+        public async Task<Song> GetById(int id)
         {
-            throw new NotImplementedException();
+            return await _musicDbContext.Songs.FirstOrDefaultAsync(x => x.Id == id);
         }
 
-        public Task Save()
+        public async Task Save()
         {
-            throw new NotImplementedException();
+            await _musicDbContext.SaveChangesAsync();
         }
 
-        public Task Update(Song entity)
+        public async Task Update(Song entity)
         {
-            throw new NotImplementedException();
+            _musicDbContext.Songs.Update(entity);
+            await Save();
         }
     }
 }

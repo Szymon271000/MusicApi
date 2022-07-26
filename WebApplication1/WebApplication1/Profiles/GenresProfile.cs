@@ -5,6 +5,7 @@ using WebApplication1.Dtos.ArtistDto;
 using WebApplication1.Dtos.GenreDto;
 using WebApplication1.Dtos.NewFolder;
 using WebApplication1.Dtos.PlaylistDto;
+using WebApplication1.Dtos.SongDto;
 using WebApplication1.Models;
 
 namespace WebApplication1.Profiles
@@ -19,7 +20,8 @@ namespace WebApplication1.Profiles
             CreateMap<Genre, UpdateGenreDto>();
 
 
-            CreateMap<Song, SongDto>();
+            CreateMap<Song, SongDtoToView>();
+            CreateMap<CreateSongDto, Song>();
 
             CreateMap<Playlist, PlaylistDto>();
             CreateMap<CreatePlaylistDto, Playlist>();

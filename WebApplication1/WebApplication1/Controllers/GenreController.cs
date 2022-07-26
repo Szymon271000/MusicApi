@@ -69,7 +69,7 @@ namespace WebApplication1.Controllers
             }
 
             var songs = _songRepository.GetAll().Result.Where(x => x.GenreId == genre.Id);
-            return Ok(_mapper.Map<IEnumerable<SongDto>>(songs));
+            return Ok(_mapper.Map<IEnumerable<SongDtoToView>>(songs));
         }
 
         [HttpGet("{id}/songs/{songId}")]
@@ -87,7 +87,7 @@ namespace WebApplication1.Controllers
             {
                 return NotFound();
             }
-            return Ok(_mapper.Map<SongDto>(song));
+            return Ok(_mapper.Map<SongDtoToView>(song));
         }
 
         [HttpPost]
