@@ -28,7 +28,7 @@ namespace WebApplication1.Controllers
         public async Task<IActionResult> GetAllGenres()
         {
             var albums = await _albumRepository.GetAll();
-            return Ok(_mapper.Map<IEnumerable<AlbumDto>>(albums));
+            return Ok(_mapper.Map<IEnumerable<AlbumDtoToView>>(albums));
         }
 
         [HttpGet("{id}")]
@@ -39,7 +39,7 @@ namespace WebApplication1.Controllers
             {
                 return NotFound();
             }
-            return Ok(_mapper.Map<AlbumDto>(album));
+            return Ok(_mapper.Map<AlbumDtoToView>(album));
         }
 
         [HttpGet("{id}/songs")]
@@ -81,7 +81,7 @@ namespace WebApplication1.Controllers
             {
                 var albumToAdd = _mapper.Map<Album>(createdAlbum);
                 await _albumRepository.Add(albumToAdd);
-                return Ok(_mapper.Map<AlbumDto>(albumToAdd));
+                return Ok(_mapper.Map<AlbumDtoToView>(albumToAdd));
             }
             return BadRequest();
         }

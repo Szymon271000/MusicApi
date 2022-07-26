@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
+using WebApplication1.Dtos;
 using WebApplication1.Dtos.AlbumDto;
+using WebApplication1.Dtos.ArtistDto;
 using WebApplication1.Dtos.GenreDto;
 using WebApplication1.Dtos.NewFolder;
 using WebApplication1.Dtos.PlaylistDto;
@@ -24,12 +26,15 @@ namespace WebApplication1.Profiles
             CreateMap<UpdatePlaylistDto, Playlist>();
             CreateMap<Playlist, UpdatePlaylistDto>();
 
-            CreateMap<Album, AlbumDto>();
+            CreateMap<Album, AlbumDtoToView>();
             CreateMap<CreatedAlbumDto, Album>();
             CreateMap<UpdatedAlbumDto, Album>();
             CreateMap<Album,UpdatedAlbumDto>();
 
-
+            CreateMap<Artist, ArtistDtoToView>();
+            CreateMap<CreateArtistDto, Artist>();
+            CreateMap<UpdateArtistDto, Artist>();
+            CreateMap<Artist,UpdateArtistDto>();
         }
     }
 }
