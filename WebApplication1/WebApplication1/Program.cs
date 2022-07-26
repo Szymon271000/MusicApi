@@ -45,6 +45,8 @@ builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 builder.Services.AddScoped<IBaseRepository<Genre>, GenreRepository>();
 builder.Services.AddScoped<IBaseRepository<Song>, SongRepository>();
 builder.Services.AddScoped<IBaseRepository<Playlist>, PlaylistRepository>();
+builder.Services.AddScoped<IBaseRepository<Album>, AlbumRepository>();
+
 
 
 var app = builder.Build();
