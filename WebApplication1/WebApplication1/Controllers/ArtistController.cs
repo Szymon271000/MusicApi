@@ -13,25 +13,25 @@ namespace WebApplication1.Controllers
     {
         private readonly IMapper _mapper;
         private readonly IBaseRepository<Artist> _artistRepository;
-        private readonly IBaseRepository<Song> _songRepository;
+        private readonly IBaseRepository<Album> _albumRepository;
 
 
-        public ArtistController(IBaseRepository<Artist> artistRepository, IBaseRepository<Song> songRepository, IMapper mapper)
+        public ArtistController(IBaseRepository<Artist> artistRepository, IBaseRepository<Album> albumRepository, IMapper mapper)
         {
+            _albumRepository = albumRepository;
             _artistRepository = artistRepository;
-            _songRepository = songRepository;
             _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAllGenres()
+        public async Task<IActionResult> GetAllArtists()
         {
             var artists = await _artistRepository.GetAll();
             return Ok(_mapper.Map<IEnumerable<ArtistDtoToView>>(artists));
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetGenreById(int id)
+        public async Task<IActionResult> GetArtistById(int id)
         {
             var artist = await _artistRepository.GetById(id);
             if (artist == null)
@@ -54,7 +54,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateGenre(int id, UpdateArtistDto updatedArtist)
+        public async Task<IActionResult> UpdateArtist(int id, UpdateArtistDto updatedArtist)
         {
             var artist = await _artistRepository.GetById(id);
             if (artist == null)
@@ -74,17 +74,30 @@ namespace WebApplication1.Controllers
             {
                 return NotFound();
             }
-
-            var songsOfThisArtist = await _songRepository.GetAll();
-            foreach (var song in songsOfThisArtist)
-            {
-                if (song.ArtistId == id)
-                {
-                    song.Genre = null;
-                }
-            }
             await _artistRepository.Delete(artistToDelete);
             return NoContent();
+        }
+
+        [HttpPut("{id}/albums/{albumId}")]
+        public async Task<IActionResult> AddAlbumToArtist(int id, int albumId)
+        {
+            var artist = await _artistRepository.GetById(id);
+            if (artist == null)
+            {
+                return NotFound();
+            }
+            var album = await _albumRepository.GetById(albumId);
+            if (album == null)
+            {
+                return NotFound();
+            }
+
+            artist.Albums.Add(album);
+            await _albumRepository.Update(album);
+            await _artistRepository.Update(artist);
+            await _albumRepository.Save();
+            await _artistRepository.Save();
+            return Ok();
         }
     }
 }

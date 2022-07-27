@@ -86,42 +86,6 @@ namespace WebApplication1.Controllers
             return NoContent();
         }
 
-        [HttpPut("{id}/artist/{artistId}")]
-        public async Task<IActionResult> UpdateArtistOfSong(int id, int artistId)
-        {
-            var song = await _songRepository.GetById(id);
-            if (song == null)
-            {
-                return NotFound();
-            }
-            var artist = await _artistRepository.GetById(artistId);
-            if (artist == null)
-            {
-                return NotFound();
-            }
-            song.ArtistId = artist.Id;
-            await _songRepository.Update(song);
-            return Ok();
-        }
-
-        [HttpPut("{id}/album/{albumId}")]
-        public async Task<IActionResult> UpdateAlbumtOfSong(int id, int albumId)
-        {
-            var song = await _songRepository.GetById(id);
-            if (song == null)
-            {
-                return NotFound();
-            }
-            var album = await _albumRepository.GetById(albumId);
-            if (album == null)
-            {
-                return NotFound();
-            }
-            song.AlbumId = album.Id;
-            await _songRepository.Update(song);
-            return Ok();
-        }
-
         [HttpPut("{id}/genre/{genreId}")]
         public async Task<IActionResult> UpdateGenreOfSong(int id, int genreId)
         {
@@ -135,7 +99,8 @@ namespace WebApplication1.Controllers
             {
                 return NotFound();
             }
-            song.GenreId = genre.Id;
+            song.Genre = genre;
+            await _genreRepository.Update(genre);
             await _songRepository.Update(song);
             return Ok();
         }

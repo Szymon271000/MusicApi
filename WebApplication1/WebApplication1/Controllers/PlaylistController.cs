@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApplication1.Data.Repository.Interface;
 using WebApplication1.Dtos.NewFolder;
@@ -13,12 +12,14 @@ namespace WebApplication1.Controllers
     public class PlaylistController : ControllerBase
     {
         private readonly IBaseRepository<Playlist> _playlistRepository;
-
+        private readonly IBaseRepository<Song> _songRepository;
+        private List<Song> songs = new List<Song>();
 
 
         private readonly IMapper _mapper;
-        public PlaylistController(IBaseRepository<Playlist> playlistRepository, IMapper mapper)
+        public PlaylistController(IBaseRepository<Playlist> playlistRepository, IBaseRepository<Song> songRepository, IMapper mapper)
         {
+            _songRepository = songRepository;
             _playlistRepository = playlistRepository;
             _mapper = mapper;
         }
@@ -107,6 +108,28 @@ namespace WebApplication1.Controllers
             }
             await _playlistRepository.Delete(playlistToDelete);
             return NoContent();
+        }
+
+        [HttpPut("{id}/songs/{songId}")]
+        public async Task<IActionResult> AddSongToPlaylist(int id, int songId)
+        {
+            var playlist = await _playlistRepository.GetById(id);
+            if (playlist == null)
+            {
+                return NotFound();
+            }
+            var song = await _songRepository.GetById(songId);
+            if (song == null)
+            {
+                return NotFound();
+            }
+            
+            playlist.Songs.Add(song);
+            await _songRepository.Update(song);
+            await _playlistRepository.Update(playlist);
+            await _playlistRepository.Save();
+            await _songRepository.Save();
+            return Ok();
         }
     }
 }

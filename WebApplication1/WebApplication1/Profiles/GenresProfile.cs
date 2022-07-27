@@ -22,6 +22,8 @@ namespace WebApplication1.Profiles
 
             CreateMap<Song, SongDtoToView>();
             CreateMap<CreateSongDto, Song>();
+            CreateMap<UpdateSongDto, Song>();
+            CreateMap<Song, UpdateSongDto>();
 
             CreateMap<Playlist, PlaylistDto>();
             CreateMap<CreatePlaylistDto, Playlist>();

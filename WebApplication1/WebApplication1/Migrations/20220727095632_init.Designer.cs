@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WebApplication1.Data;
 
@@ -11,9 +12,10 @@ using WebApplication1.Data;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(MusicDbContext))]
-    partial class MusicDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220727095632_init")]
+    partial class init
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -102,6 +104,9 @@ namespace WebApplication1.Migrations
                     b.Property<int?>("AlbumId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("ArtistId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("GenreId")
                         .HasColumnType("int");
 
@@ -114,6 +119,8 @@ namespace WebApplication1.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("AlbumId");
+
+                    b.HasIndex("ArtistId");
 
                     b.HasIndex("GenreId");
 
@@ -137,6 +144,10 @@ namespace WebApplication1.Migrations
                         .WithMany("Songs")
                         .HasForeignKey("AlbumId");
 
+                    b.HasOne("WebApplication1.Models.Artist", "Artist")
+                        .WithMany()
+                        .HasForeignKey("ArtistId");
+
                     b.HasOne("WebApplication1.Models.Genre", "Genre")
                         .WithMany()
                         .HasForeignKey("GenreId");
@@ -146,6 +157,8 @@ namespace WebApplication1.Migrations
                         .HasForeignKey("PlaylistId");
 
                     b.Navigation("Album");
+
+                    b.Navigation("Artist");
 
                     b.Navigation("Genre");
 

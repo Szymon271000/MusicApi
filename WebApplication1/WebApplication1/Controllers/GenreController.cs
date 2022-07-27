@@ -136,5 +136,26 @@ namespace WebApplication1.Controllers
             await _genreRepository.Delete(genreToDelete);
             return NoContent();
         }
+
+        [HttpPut("{id}/addGender/{songId}")]
+        public async Task<IActionResult> UpdateSongGender(int id, int songId)
+        {
+            var genre = await _genreRepository.GetById(id);
+            if (genre == null)
+            {
+                return NotFound();
+            }
+            var song = await _songRepository.GetById(songId);
+            if (song == null)
+            {
+                return NotFound();
+            }
+            song.Genre = genre;
+            await _songRepository.Update(song);
+            await _genreRepository.Update(genre);
+            await _songRepository.Save();
+            await _genreRepository.Save();
+            return Ok();
+        }
     }
 }

@@ -14,6 +14,7 @@ namespace WebApplication1.Controllers
     {
         private readonly IBaseRepository<Album> _albumRepository;
         private readonly IBaseRepository<Song> _songRepository;
+        private List<Song> songs = new List<Song>();
 
         private readonly IMapper _mapper;
 
@@ -32,7 +33,7 @@ namespace WebApplication1.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<IActionResult> GetgenresById(int id)
+        public async Task<IActionResult> GetAlbumById(int id)
         {
             var album = await _albumRepository.GetById(id);
             if (album == null)
@@ -51,7 +52,7 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            var songs = _songRepository.GetAll().Result.Where(x => x.AlbumId == album.Id);
+            var songs = album.Songs;
             return Ok(_mapper.Map<IEnumerable<SongDtoToView>>(songs));
         }
 
@@ -64,7 +65,7 @@ namespace WebApplication1.Controllers
                 return NotFound();
             }
 
-            var song = _songRepository.GetAll().Result.FirstOrDefault(x => x.AlbumId == album.Id && x.Id == songId);
+            var song = album.Songs.FirstOrDefault(x => x.Id == songId);
 
             if (song == null)
             {
@@ -107,17 +108,31 @@ namespace WebApplication1.Controllers
             {
                 return NotFound();
             }
-
-            var songsWithThisAlbum = await _songRepository.GetAll();
-            foreach (var song in songsWithThisAlbum)
-            {
-                if (song.AlbumId == albumToDelete.Id)
-                {
-                    song.Album = null;
-                }
-            }
             await _albumRepository.Delete(albumToDelete);
             return NoContent();
+        }
+
+        [HttpPut("{id}/songs/{songId}")]
+        public async Task<IActionResult> AddSongToAlbum(int id, int songId)
+        {
+            var album = await _albumRepository.GetById(id);
+            if (album == null)
+            {
+                return NotFound();
+            }
+            var song = await _songRepository.GetById(songId);
+            if (song == null)
+            {
+                return NotFound();
+            }
+
+            album.Songs.Add(song);
+
+            await _songRepository.Update(song);
+            await _albumRepository.Update(album);
+            await _songRepository.Save();
+            await _albumRepository.Save();
+            return Ok();
         }
     }
 }

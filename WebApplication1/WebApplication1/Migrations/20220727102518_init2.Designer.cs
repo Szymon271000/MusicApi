@@ -12,8 +12,8 @@ using WebApplication1.Data;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(MusicDbContext))]
-    [Migration("20220727075247_init")]
-    partial class init
+    [Migration("20220727102518_init2")]
+    partial class init2
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -104,9 +104,6 @@ namespace WebApplication1.Migrations
                     b.Property<int?>("AlbumId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("ArtistId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("GenreId")
                         .HasColumnType("int");
 
@@ -120,8 +117,6 @@ namespace WebApplication1.Migrations
 
                     b.HasIndex("AlbumId");
 
-                    b.HasIndex("ArtistId");
-
                     b.HasIndex("GenreId");
 
                     b.HasIndex("PlaylistId");
@@ -131,9 +126,11 @@ namespace WebApplication1.Migrations
 
             modelBuilder.Entity("WebApplication1.Models.Album", b =>
                 {
-                    b.HasOne("WebApplication1.Models.Artist", null)
+                    b.HasOne("WebApplication1.Models.Artist", "Artist")
                         .WithMany("Albums")
                         .HasForeignKey("ArtistId");
+
+                    b.Navigation("Artist");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Song", b =>
@@ -142,23 +139,19 @@ namespace WebApplication1.Migrations
                         .WithMany("Songs")
                         .HasForeignKey("AlbumId");
 
-                    b.HasOne("WebApplication1.Models.Artist", "Artist")
-                        .WithMany()
-                        .HasForeignKey("ArtistId");
-
                     b.HasOne("WebApplication1.Models.Genre", "Genre")
                         .WithMany()
                         .HasForeignKey("GenreId");
 
-                    b.HasOne("WebApplication1.Models.Playlist", null)
+                    b.HasOne("WebApplication1.Models.Playlist", "Playlist")
                         .WithMany("Songs")
                         .HasForeignKey("PlaylistId");
 
                     b.Navigation("Album");
 
-                    b.Navigation("Artist");
-
                     b.Navigation("Genre");
+
+                    b.Navigation("Playlist");
                 });
 
             modelBuilder.Entity("WebApplication1.Models.Album", b =>
