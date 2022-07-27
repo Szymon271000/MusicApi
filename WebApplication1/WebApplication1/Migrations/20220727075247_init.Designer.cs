@@ -12,7 +12,7 @@ using WebApplication1.Data;
 namespace WebApplication1.Migrations
 {
     [DbContext(typeof(MusicDbContext))]
-    [Migration("20220725182208_init")]
+    [Migration("20220727075247_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
