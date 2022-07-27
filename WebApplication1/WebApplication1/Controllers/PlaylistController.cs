@@ -13,7 +13,7 @@ namespace WebApplication1.Controllers
     {
         private readonly IBaseRepository<Playlist> _playlistRepository;
         private readonly IBaseRepository<Song> _songRepository;
-        private List<Song> songs = new List<Song>();
+
 
 
         private readonly IMapper _mapper;
@@ -24,6 +24,39 @@ namespace WebApplication1.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Get all playlists
+        /// </summary>
+        /// <returns>All playlists</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET 
+        ///        [
+        ///          {
+        ///    "name": "Playlist1",
+        ///            "songs": [
+        ///              {
+        ///        "name": "Song1",
+        ///                "albumId": 3,
+        ///                "genreId": 1
+        ///      },
+        ///      {
+        ///        "name": "Song2",
+        ///        "albumId": 2,
+        ///        "genreId": 1
+        ///      },
+        ///      {
+        ///    "name": "Song3",
+        ///        "albumId": 2,
+        ///        "genreId": 1
+        ///      }
+        ///    ]
+        ///  }
+        ///]
+        /// </remarks>
+        /// <response code="201">Returns all playlists</response>
+        /// <response code="400">If the item is null</response>
         [HttpGet]
         public async Task<IActionResult> GetAllPlaylists()
         {
@@ -31,6 +64,39 @@ namespace WebApplication1.Controllers
             return Ok(_mapper.Map<IEnumerable<PlaylistDto>>(playlists));
         }
 
+        /// <summary>
+        /// Get playlist with specific id 
+        /// </summary>
+        /// <returns>Playlist with specific id</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET 
+        ///        [
+        ///          {
+        ///    "name": "Playlist1",
+        ///            "songs": [
+        ///              {
+        ///        "name": "Song1",
+        ///                "albumId": 3,
+        ///                "genreId": 1
+        ///      },
+        ///      {
+        ///        "name": "Song2",
+        ///        "albumId": 2,
+        ///        "genreId": 1
+        ///      },
+        ///      {
+        ///    "name": "Song3",
+        ///        "albumId": 2,
+        ///        "genreId": 1
+        ///      }
+        ///    ]
+        ///  }
+        ///]
+        /// </remarks>
+        /// <response code="201">Returns playlist with specific id</response>
+        /// <response code="400">If the item is null</response>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPlaylistById(int id)
         {
@@ -42,6 +108,39 @@ namespace WebApplication1.Controllers
             return Ok(_mapper.Map<PlaylistDto>(playlist));
         }
 
+        /// <summary>
+        /// Get songs of playlist with specific id 
+        /// </summary>
+        /// <returns>songs of playlist with specific id</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET 
+        ///        [
+        ///          {
+        ///    "name": "Playlist1",
+        ///            "songs": [
+        ///              {
+        ///        "name": "Song1",
+        ///                "albumId": 3,
+        ///                "genreId": 1
+        ///      },
+        ///      {
+        ///        "name": "Song2",
+        ///        "albumId": 2,
+        ///        "genreId": 1
+        ///      },
+        ///      {
+        ///    "name": "Song3",
+        ///        "albumId": 2,
+        ///        "genreId": 1
+        ///      }
+        ///    ]
+        ///  }
+        ///]
+        /// </remarks>
+        /// <response code="201">Returns songs of playlist with specific id</response>
+        /// <response code="400">If the item is null</response>
         [HttpGet("{id}/songs")]
         public async Task<IActionResult> GetSongOfThisPlaylist(int id)
         {
@@ -55,6 +154,30 @@ namespace WebApplication1.Controllers
             return Ok(_mapper.Map<IEnumerable<SongDtoToView>>(songs));
         }
 
+
+        /// <summary>
+        /// Get song with specific id of playlist with specific id 
+        /// </summary>
+        /// <returns>song of playlist with specific id</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET 
+        ///        [
+        ///          {
+        ///    "name": "Playlist1",
+        ///            "songs": [
+        ///              {
+        ///        "name": "Song1",
+        ///                "albumId": 3,
+        ///                "genreId": 1
+        ///      },
+        ///    ]
+        ///  }
+        ///]
+        /// </remarks>
+        /// <response code="201">Returns song with specific id of playlist with specific id</response>
+        /// <response code="400">If the item is null</response>
         [HttpGet("{id}/songs/{songId}")]
         public async Task<IActionResult> GetSongOfThisPlaylist(int id, int songId)
         {
@@ -73,7 +196,24 @@ namespace WebApplication1.Controllers
             return Ok(_mapper.Map<SongDtoToView>(song));
         }
 
-        [HttpPost]
+        /// <summary>
+        /// Create playlist
+        /// </summary>
+        /// <param name="createdPlaylist"></param>
+        /// <returns>Create playlist</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET 
+        ///{
+        ///  "name": "",
+        ///  "songs": []
+        ///}
+        ///
+        /// </remarks>
+        /// <response code="201">Ok</response>
+        /// <response code="400">Bad Request</response>
+    [HttpPost]
         public async Task<IActionResult> CreatePlaylist(CreatePlaylistDto createdPlaylist)
         {
             if (ModelState.IsValid)
@@ -85,6 +225,24 @@ namespace WebApplication1.Controllers
             return BadRequest();
         }
 
+        /// <summary>
+        /// Update playlist
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updatedPlaylist"></param>
+        /// <returns>Update playlist</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET 
+        ///{
+        ///  "name": "",
+        ///  "songs": []
+        ///}
+        ///
+        /// </remarks>
+        /// <response code="201">Ok</response>
+        /// <response code="400">Bad Request</response>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdatePlaylist(int id, UpdatePlaylistDto updatedPlaylist)
         {
@@ -98,6 +256,23 @@ namespace WebApplication1.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Delete playlist
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Delete playlist</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET 
+        ///     {
+        ///        "name": "",
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="201">NoContent</response>
+        /// <response code="404">Not found</response>
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePlaylist(int id)
         {
@@ -110,6 +285,24 @@ namespace WebApplication1.Controllers
             return NoContent();
         }
 
+
+        /// <summary>
+        /// Add song to playlist
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="songId"></param>
+        /// <returns>Add song to playlist</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET 
+        ///     {
+        ///        "name": "",
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="201">Ok</response>
+        /// <response code="404">Not found</response>
         [HttpPut("{id}/songs/{songId}")]
         public async Task<IActionResult> AddSongToPlaylist(int id, int songId)
         {

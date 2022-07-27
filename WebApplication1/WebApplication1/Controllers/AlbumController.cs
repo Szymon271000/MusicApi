@@ -14,7 +14,6 @@ namespace WebApplication1.Controllers
     {
         private readonly IBaseRepository<Album> _albumRepository;
         private readonly IBaseRepository<Song> _songRepository;
-        private List<Song> songs = new List<Song>();
 
         private readonly IMapper _mapper;
 
@@ -25,6 +24,32 @@ namespace WebApplication1.Controllers
             _mapper = mapper;
         }
 
+
+
+        /// <summary>
+        /// Get all albums
+        /// </summary>
+        /// <returns>All albums</returns>
+        /// <remarks>
+        /// Sample request:
+        /// {
+        ///"name": "Album2",
+        ///"songs": [
+        ///    {
+        ///    "name": "Song2",
+        ///    "albumId": 2,
+        ///    "genreId": 1
+        ///    },
+        ///    {
+        ///    "name": "Song3",
+        ///    "albumId": 2,
+        ///    "genreId": 1
+        ///    }
+        ///]
+        ///},
+        /// </remarks>
+        /// <response code="201">Returns all albums</response>
+        /// <response code="400">If the item is null</response>
         [HttpGet]
         public async Task<IActionResult> GetAllGenres()
         {
@@ -32,6 +57,31 @@ namespace WebApplication1.Controllers
             return Ok(_mapper.Map<IEnumerable<AlbumDtoToView>>(albums));
         }
 
+        /// <summary>
+        /// Get album with this id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Album with this id</returns>
+        /// <remarks>
+        /// Sample request:
+        /// {
+        ///"name": "Album2",
+        ///"songs": [
+        ///    {
+        ///    "name": "Song2",
+        ///    "albumId": 2,
+        ///    "genreId": 1
+        ///    },
+        ///    {
+        ///    "name": "Song3",
+        ///    "albumId": 2,
+        ///    "genreId": 1
+        ///    }
+        ///]
+        ///},
+        /// </remarks>
+        /// <response code="201">Returns album with this id</response>
+        /// <response code="400">If the item is null</response>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetAlbumById(int id)
         {
@@ -42,6 +92,32 @@ namespace WebApplication1.Controllers
             }
             return Ok(_mapper.Map<AlbumDtoToView>(album));
         }
+
+        /// <summary>
+        /// Get songs of this album with this id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Songs of this album with this id</returns>
+        /// <remarks>
+        /// Sample request:
+        /// {
+        ///"name": "Album2",
+        ///"songs": [
+        ///    {
+        ///    "name": "Song2",
+        ///    "albumId": 2,
+        ///    "genreId": 1
+        ///    },
+        ///    {
+        ///    "name": "Song3",
+        ///    "albumId": 2,
+        ///    "genreId": 1
+        ///    }
+        ///]
+        ///},
+        /// </remarks>
+        /// <response code="201">Returns songs of album with this id</response>
+        /// <response code="400">If the item is null</response>
 
         [HttpGet("{id}/songs")]
         public async Task<IActionResult> GetSongOfThisAlbum(int id)
@@ -56,6 +132,26 @@ namespace WebApplication1.Controllers
             return Ok(_mapper.Map<IEnumerable<SongDtoToView>>(songs));
         }
 
+        /// <summary>
+        /// Get song with this id of this album with this id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="songId"></param>
+        /// <returns>Song with this id of this album with this id</returns>
+        /// <remarks>
+        /// Sample request:
+        /// {
+        ///"name": "Album2",
+        ///"songs": [
+        ///    {
+        ///    "name": "Song2",
+        ///    "albumId": 2,
+        ///    "genreId": 1
+        ///]
+        ///},
+        /// </remarks>
+        /// <response code="201">Song with this id of this album with this id</response>
+        /// <response code="400">If the item is null</response>
         [HttpGet("{id}/songs/{songId}")]
         public async Task<IActionResult> GetSongOfThisAlbum(int id, int songId)
         {
@@ -74,8 +170,21 @@ namespace WebApplication1.Controllers
             return Ok(_mapper.Map<SongDtoToView>(song));
         }
 
-
-        [HttpPost]
+        /// <summary>
+        /// Create an album
+        /// </summary>
+        /// <param name="createdAlbum"></param>
+        /// <returns>New album</returns>
+        /// <remarks>
+        /// Sample request:
+        ///{
+        ///{
+        ///  "name": "Album4",
+        ///  "songs": []
+        ///}
+        /// </remarks>
+        /// <response code="201">New album in database</response>
+    [HttpPost]
         public async Task<IActionResult> CreateAlbum(CreatedAlbumDto createdAlbum)
         {
             if (ModelState.IsValid)
@@ -86,6 +195,14 @@ namespace WebApplication1.Controllers
             }
             return BadRequest();
         }
+
+        /// <summary>
+        /// Update an album
+        /// </summary>
+        /// <param name="updatedAlbum"></param>
+        /// <param name="id"></param>
+        /// <returns>Updated album</returns>
+        /// <response code="201">Updated album in database</response>
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAlbum(int id, UpdatedAlbumDto updatedAlbum)
@@ -100,6 +217,13 @@ namespace WebApplication1.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Delete album
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Delete album</returns>
+        /// <response code="201">NoContent</response>
+        /// <response code="404">Not found</response>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteAlbum(int id)
         {
@@ -111,6 +235,15 @@ namespace WebApplication1.Controllers
             await _albumRepository.Delete(albumToDelete);
             return NoContent();
         }
+
+        /// <summary>
+        /// Add song to Album
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="songId"></param>
+        /// <returns>Add song to Album</returns>
+        /// <response code="201">Ok</response>
+        /// <response code="404">Not found</response>
 
         [HttpPut("{id}/songs/{songId}")]
         public async Task<IActionResult> AddSongToAlbum(int id, int songId)

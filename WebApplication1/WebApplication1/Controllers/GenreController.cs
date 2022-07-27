@@ -23,6 +23,21 @@ namespace WebApplication1.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Get all genres
+        /// </summary>
+        /// <returns>All genres</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET 
+        ///     {
+        ///        "name": "",
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="201">Returns all genres</response>
+        /// <response code="400">If the item is null</response>
         [HttpGet]
         public async Task<IActionResult> GetAllGenres()
         {
@@ -31,22 +46,20 @@ namespace WebApplication1.Controllers
         }
 
         /// <summary>
-        /// Creates a TodoItem.
+        /// Get a genre by specific id.
         /// </summary>
         /// <param name="id"></param>
-        /// <returns>A newly created TodoItem</returns>
+        /// <returns>A genre with this id</returns>
         /// <remarks>
         /// Sample request:
         ///
-        ///     POST /Todo
+        ///     GET 
         ///     {
-        ///        "id": 1,
-        ///        "name": "Item #1",
-        ///        "isComplete": true
+        ///        "name": "",
         ///     }
         ///
         /// </remarks>
-        /// <response code="201">Returns the newly created item</response>
+        /// <response code="201">Returns the genre</response>
         /// <response code="400">If the item is null</response>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetGenreById(int id)
@@ -59,7 +72,26 @@ namespace WebApplication1.Controllers
             return Ok(_mapper.Map<GenreDto>(genre));
         }
 
-        [HttpGet("{id}/songs")]
+
+        /// <summary>
+        /// Get songs by this specific gender
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Song of this gender with this id</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        /// GET
+        ///     {
+        ///        "name": "Song1",
+        ///        "albumId": 3,
+        ///        "genreId": 1
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="201">Returns the songs</response>
+        /// <response code="400">If the item is null</response>
+    [HttpGet("{id}/songs")]
         public async Task<IActionResult> GetSongOfThisGenre(int id)
         {
             var genre = await _genreRepository.GetById(id);
@@ -72,6 +104,25 @@ namespace WebApplication1.Controllers
             return Ok(_mapper.Map<IEnumerable<SongDtoToView>>(songs));
         }
 
+        /// <summary>
+        /// Get song by this specific gender by specif id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="songId"></param>
+        /// <returns>Song of this gender with this specific id</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        /// GET
+        ///     {
+        ///        "name": "Song1",
+        ///        "albumId": 3,
+        ///        "genreId": 1
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="201">Returns the songs</response>
+        /// <response code="400">If the item is null</response>
         [HttpGet("{id}/songs/{songId}")]
         public async Task<IActionResult> GetSongOfThisGenre(int id, int songId)
         {
@@ -90,6 +141,23 @@ namespace WebApplication1.Controllers
             return Ok(_mapper.Map<SongDtoToView>(song));
         }
 
+        /// <summary>
+        /// Create gender
+        /// </summary>
+        /// <param name="createdGenre"></param>
+        /// <returns>Create genre</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET 
+        ///     {
+        ///        "name": "",
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="201">Ok</response>
+        /// <response code="400">Bad Request</response>
+
         [HttpPost]
         public async Task<IActionResult> CreateGenre(CreateGenreDto createdGenre)
         {
@@ -103,6 +171,23 @@ namespace WebApplication1.Controllers
             
         }
 
+        /// <summary>
+        /// Update gender
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updatedGenre"></param>
+        /// <returns>Update genre</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET 
+        ///     {
+        ///        "name": "",
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="201">Ok</response>
+        /// <response code="404">Not found</response>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateGenre(int id, UpdateGenreDto updatedGenre)
         {
@@ -116,6 +201,22 @@ namespace WebApplication1.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Delete gender
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Delete genre</returns>
+        /// <remarks>
+        /// Sample request:
+        ///
+        ///     GET 
+        ///     {
+        ///        "name": "",
+        ///     }
+        ///
+        /// </remarks>
+        /// <response code="201">Ok</response>
+        /// <response code="404">Not found</response>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteGenre(int id)
         {
@@ -136,6 +237,15 @@ namespace WebApplication1.Controllers
             await _genreRepository.Delete(genreToDelete);
             return NoContent();
         }
+
+        /// <summary>
+        /// Update Song gender
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="songId"></param>
+        /// <returns>Update Song gender</returns>
+        /// <response code="201">Ok</response>
+        /// <response code="404">Not found</response>
 
         [HttpPut("{id}/addGender/{songId}")]
         public async Task<IActionResult> UpdateSongGender(int id, int songId)

@@ -23,6 +23,38 @@ namespace WebApplication1.Controllers
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Get all artists
+        /// </summary>
+        /// <returns>All artist</returns>
+        /// <remarks>
+        /// Sample request:
+        ///GET
+        ///{
+        ///  "name": "",
+        ///  "albums": [
+        ///    {
+        ///      "name": "",
+        ///      "songs": [
+        ///        {
+        ///          "name": "",
+        ///          "albumId": ,
+        ///          "genreId": 
+        ///        },
+        ///        {
+        ///          "name": ,
+        ///          "albumId": ,
+        ///          "genreId": 
+        ///        }
+        ///      ]
+        ///    }
+        ///  ]
+        ///}
+        ///
+        /// </remarks>
+        /// <response code="201">Returns all genres</response>
+        /// <response code="400">If the item is null</response>
+
         [HttpGet]
         public async Task<IActionResult> GetAllArtists()
         {
@@ -30,6 +62,31 @@ namespace WebApplication1.Controllers
             return Ok(_mapper.Map<IEnumerable<ArtistDtoToView>>(artists));
         }
 
+        /// <summary>
+        /// Get artist with this id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Artist with this id</returns>
+        /// <remarks>
+        /// Sample request:
+        /// {
+        ///"name": "",
+        ///"songs": [
+        ///    {
+        ///    "name": "Song2",
+        ///    "albumId": 2,
+        ///    "genreId": 1
+        ///    },
+        ///    {
+        ///    "name": "Song3",
+        ///    "albumId": 2,
+        ///    "genreId": 1
+        ///    }
+        ///]
+        ///},
+        /// </remarks>
+        /// <response code="201">Returns artist with this id</response>
+        /// <response code="400">If the item is null</response>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetArtistById(int id)
         {
@@ -41,8 +98,22 @@ namespace WebApplication1.Controllers
             return Ok(_mapper.Map<ArtistDtoToView>(artist));
         }
 
-        [HttpPost]
-        public async Task<IActionResult> CreateArtist(Dtos.ArtistDto.CreateArtistDto createdArtist)
+        /// <summary>
+        /// Create new artist
+        /// </summary>
+        /// <param name="createdArtist"></param>
+        /// <returns>New artist</returns>
+        /// <remarks>
+        /// Sample request:
+        ///   {
+       ///"name": "Artist3",
+      ///"albums": []
+      ///  }
+    /// </remarks>
+    /// <response code="201">Create new artist</response>
+    /// <response code="400">If the item is null</response>
+    [HttpPost]
+        public async Task<IActionResult> CreateArtist(CreateArtistDto createdArtist)
         {
             if (ModelState.IsValid)
             {
@@ -53,6 +124,21 @@ namespace WebApplication1.Controllers
             return BadRequest();
         }
 
+        /// <summary>
+        /// Update an exiting artist
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="updatedArtist"></param>
+        /// <returns>updatede artist</returns>
+        /// <remarks>
+        /// Sample request:
+        ///   {
+        ///     "name": "Artist3",
+        ///     "albums": []
+        ///  }
+        /// </remarks>
+        /// <response code="201">Updated artist</response>
+        /// <response code="400">If the item is null</response>
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateArtist(int id, UpdateArtistDto updatedArtist)
         {
@@ -66,6 +152,12 @@ namespace WebApplication1.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// Delete an exiting artist
+        /// </summary>
+        /// <param name="id"></param>
+        /// <response code="201">Delete artist</response>
+        /// <response code="400">If the item is null</response>
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteArtist(int id)
         {
@@ -78,6 +170,15 @@ namespace WebApplication1.Controllers
             return NoContent();
         }
 
+
+        /// <summary>
+        /// Add album to artist
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="albumId"></param>
+        /// <returns>Add album to artist</returns>
+        /// <response code="201">Ok</response>
+        /// <response code="404">Not found</response>
         [HttpPut("{id}/albums/{albumId}")]
         public async Task<IActionResult> AddAlbumToArtist(int id, int albumId)
         {
