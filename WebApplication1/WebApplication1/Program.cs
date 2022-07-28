@@ -52,7 +52,7 @@ builder.Services.AddScoped<IBaseRepository<Artist>, ArtistRepository>();
 
 
 var app = builder.Build();
-
+app.UseHttpLogging();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
@@ -61,6 +61,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
 
 app.UseAuthorization();
 
