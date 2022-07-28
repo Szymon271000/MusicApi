@@ -27,12 +27,19 @@ namespace WebApplication1.Data.Repository.Repositories
 
         public async Task<List<Album>> GetAll()
         {
-            return await _musicDbContext.Albums.Include(x => x.Songs).ToListAsync();
+            return await _musicDbContext.Albums.Include(x => x.Songs)
+                .ThenInclude(x=> x.Genre)
+                .Include(x=> x.Songs)
+                .ThenInclude(x=>x.Playlist)
+                .ToListAsync();
         }
 
         public async Task<Album> GetById(int id)
         {
-            return await _musicDbContext.Albums.Include(x => x.Songs).FirstOrDefaultAsync(x => x.Id == id);
+            return await _musicDbContext.Albums.Include(x => x.Songs)
+                .ThenInclude(x => x.Genre)
+                .Include(x => x.Songs)
+                .ThenInclude(x => x.Playlist).FirstOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task Save()

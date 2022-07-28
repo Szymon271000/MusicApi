@@ -8,9 +8,9 @@ namespace WebApplication1.Dtos.NewFolder
     public class SongDtoToView
     {
         public string? Name { get; set; }
-        public int? AlbumId { get; set; }
 
-        public int? GenreId { get; set; }
-
+        public string? Album { get; set; }
+        public string? Genre { get; set; }
+        public string? Playlist { get; set; }
     }
 }

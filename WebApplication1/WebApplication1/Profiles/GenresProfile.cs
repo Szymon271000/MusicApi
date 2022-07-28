@@ -20,7 +20,10 @@ namespace WebApplication1.Profiles
             CreateMap<Genre, UpdateGenreDto>();
 
 
-            CreateMap<Song, SongDtoToView>();
+            CreateMap<Song, SongDtoToView>()
+                .ForMember(dest => dest.Genre, opt => opt.MapFrom(src => src.Genre.Name))
+                .ForMember(dest => dest.Album, opt => opt.MapFrom(src => src.Album.Name))
+                .ForMember(dest => dest.Playlist, opt => opt.MapFrom(src => src.Playlist.Name));
             CreateMap<CreateSongDto, Song>();
             CreateMap<UpdateSongDto, Song>();
             CreateMap<Song, UpdateSongDto>();
